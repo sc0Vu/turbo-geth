@@ -2004,6 +2004,25 @@ func searchStorageChangeSet(chaindata string, key []byte, block uint64) error {
 	return nil
 }
 
+func printSSU(chaindata string) error {
+	db := ethdb.MustOpen(chaindata)
+	defer db.Close()
+	if err := db.Walk(dbutils.SyncStageUnwind, nil, 0, func(k, v []byte) (bool, error) {
+        fmt.Printf("%x, %x\n", k, v)
+        return true, nil
+    }); err != nil {
+		return err
+	}
+    fmt.Printf("----\n")
+    if err := db.Walk(dbutils.SyncStageUnwindOld1, nil, 0, func(k, v []byte) (bool, error) {
+        fmt.Printf("%x, %x\n", k, v)
+        return true, nil
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	flag.Parse()
 
@@ -2163,6 +2182,11 @@ func main() {
 	}
 	if *action == "changeSetStats" {
 		if err := changeSetStats(*chaindata, uint64(*block), uint64(*block)+uint64(*rewind)); err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+	}
+	if *action == "printSSU" {
+		if err := printSSU(*chaindata); err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}
 	}
