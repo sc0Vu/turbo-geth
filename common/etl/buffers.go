@@ -2,8 +2,10 @@ package etl
 
 import (
 	"bytes"
+	"fmt"
 	"sort"
 	"strconv"
+	"time"
 
 	"github.com/ledgerwatch/turbo-geth/common"
 	"github.com/ledgerwatch/turbo-geth/common/dbutils"
@@ -98,6 +100,9 @@ func (b *sortableBuffer) Reset() {
 	b.size = 0
 }
 func (b *sortableBuffer) Sort() {
+	if b.comparator != nil {
+		defer func(t time.Time) { fmt.Printf("buffers.go:102: %s\n", time.Since(t)) }(time.Now())
+	}
 	sort.Stable(b)
 }
 
@@ -159,7 +164,7 @@ func (b *appendSortableBuffer) Less(i, j int) bool {
 	if b.comparator != nil {
 		return b.comparator(b.sortedBuf[i].key, b.sortedBuf[j].key, b.sortedBuf[i].value, b.sortedBuf[j].value) < 0
 	}
-	return b.comparator(b.sortedBuf[i].key, b.sortedBuf[j].key, b.sortedBuf[i].value, b.sortedBuf[j].value) < 0
+	return bytes.Compare(b.sortedBuf[i].key, b.sortedBuf[j].key) < 0
 }
 
 func (b *appendSortableBuffer) Swap(i, j int) {
