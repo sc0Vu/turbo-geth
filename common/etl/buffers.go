@@ -51,7 +51,6 @@ func NewSortableBuffer(bufferOptimalSize int) *sortableBuffer {
 		entries:     make([]sortableBufferEntry, 0),
 		size:        0,
 		optimalSize: bufferOptimalSize,
-		comparator:  dbutils.DefaultCmpFunc,
 	}
 }
 
@@ -119,7 +118,6 @@ func NewAppendBuffer(bufferOptimalSize int) *appendSortableBuffer {
 		entries:     make(map[string][]byte),
 		size:        0,
 		optimalSize: bufferOptimalSize,
-		comparator:  dbutils.DefaultCmpFunc,
 	}
 }
 
@@ -193,7 +191,6 @@ func NewOldestEntryBuffer(bufferOptimalSize int) *oldestEntrySortableBuffer {
 		entries:     make(map[string][]byte),
 		size:        0,
 		optimalSize: bufferOptimalSize,
-		comparator:  dbutils.DefaultCmpFunc,
 	}
 }
 
