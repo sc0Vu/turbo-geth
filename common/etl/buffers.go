@@ -100,7 +100,7 @@ func (b *sortableBuffer) Reset() {
 }
 func (b *sortableBuffer) Sort() {
 	if b.comparator != nil {
-		defer func(t time.Time) { fmt.Printf("buffers.go:102: %s\n", time.Since(t)) }(time.Now())
+		defer func(t time.Time) { fmt.Printf("buffers.go:102: %s, %d\n", time.Since(t), b.size) }(time.Now())
 	}
 	sort.Stable(b)
 }
