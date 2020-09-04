@@ -395,7 +395,9 @@ func (l *FlatDBTrieLoader) logProgress() {
 	var k string
 	if l.accountKey != nil {
 		k = makeCurrentKeyStr(l.accountKey)
-	} else {
+	} else if l.storageKey != nil {
+		k = makeCurrentKeyStr(l.storageKey)
+	} else if l.ihK != nil {
 		k = makeCurrentKeyStr(l.ihK)
 	}
 	log.Info("Calculating Merkle root", "current key", k)
