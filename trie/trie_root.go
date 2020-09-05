@@ -767,7 +767,8 @@ func (c *IHCursor) _next() (k, v []byte, err error) {
 			return k, v, nil
 		}
 
-		if err := c.c.DeleteCurrent(); err != nil {
+		err = c.c.DeleteCurrent()
+		if err != nil {
 			return []byte{}, nil, err
 		}
 
@@ -788,7 +789,6 @@ func (c *IHCursor) Seek(seek []byte) ([]byte, []byte, bool, error) {
 		return nil, nil, false, nil
 	}
 
-	fmt.Printf("1: %x\n", k)
 	return k, v, isSequence(seek, k), nil
 }
 

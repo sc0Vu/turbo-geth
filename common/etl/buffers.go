@@ -2,13 +2,10 @@ package etl
 
 import (
 	"bytes"
-	"fmt"
-	"sort"
-	"strconv"
-	"time"
-
 	"github.com/ledgerwatch/turbo-geth/common"
 	"github.com/ledgerwatch/turbo-geth/common/dbutils"
+	"sort"
+	"strconv"
 )
 
 const (
@@ -99,9 +96,6 @@ func (b *sortableBuffer) Reset() {
 	b.size = 0
 }
 func (b *sortableBuffer) Sort() {
-	if b.comparator != nil {
-		defer func(t time.Time) { fmt.Printf("buffers.go:102: %s, %d\n", time.Since(t), b.size) }(time.Now())
-	}
 	sort.Stable(b)
 }
 
