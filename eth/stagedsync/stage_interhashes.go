@@ -84,7 +84,7 @@ func regenerateIntermediateHashes(db ethdb.Database, datadir string, expectedRoo
 		return err
 	}
 	t := time.Now()
-	if hash, err := loader.CalcTrieRoot(db, quit); err == nil {
+	if hash, err := loader.CalcTrieRoot(tx, quit); err == nil {
 		generationIHTook := time.Since(t)
 		if hash != expectedRootHash {
 			return fmt.Errorf("wrong trie root: %x, expected (from header): %x", hash, expectedRootHash)
@@ -96,7 +96,7 @@ func regenerateIntermediateHashes(db ethdb.Database, datadir string, expectedRoo
 	} else {
 		return err
 	}
-	if err := collector.Load(db, dbutils.IntermediateTrieHashBucket, etl.IdentityLoadFunc, etl.TransformArgs{Quit: quit}); err != nil {
+	if err := collector.Load(tx, dbutils.IntermediateTrieHashBucket, etl.IdentityLoadFunc, etl.TransformArgs{Quit: quit}); err != nil {
 		return fmt.Errorf("gen ih stage: fail load data to bucket: %w", err)
 	}
 	if !useExternalTx {
@@ -265,7 +265,7 @@ func incrementIntermediateHashes(s *StageState, db ethdb.Database, to uint64, da
 		return err
 	}
 	t := time.Now()
-	hash, err := loader.CalcTrieRoot(db, quit)
+	hash, err := loader.CalcTrieRoot(tx, quit)
 	if err != nil {
 		return err
 	}
@@ -277,7 +277,7 @@ func incrementIntermediateHashes(s *StageState, db ethdb.Database, to uint64, da
 		"root hash", hash.Hex(),
 		"gen IH", generationIHTook,
 	)
-	if err := collector.Load(db,
+	if err := collector.Load(tx,
 		dbutils.IntermediateTrieHashBucket,
 		etl.IdentityLoadFunc,
 		etl.TransformArgs{
@@ -368,7 +368,7 @@ func unwindIntermediateHashesStageImpl(u *UnwindState, s *StageState, db ethdb.D
 		return err
 	}
 	t := time.Now()
-	hash, err := loader.CalcTrieRoot(db, quit)
+	hash, err := loader.CalcTrieRoot(tx, quit)
 	if err != nil {
 		return err
 	}
@@ -380,7 +380,7 @@ func unwindIntermediateHashesStageImpl(u *UnwindState, s *StageState, db ethdb.D
 		"root hash", hash.Hex(),
 		"gen IH", generationIHTook,
 	)
-	if err := collector.Load(db,
+	if err := collector.Load(tx,
 		dbutils.IntermediateTrieHashBucket,
 		etl.IdentityLoadFunc,
 		etl.TransformArgs{

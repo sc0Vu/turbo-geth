@@ -388,7 +388,6 @@ func (l *FlatDBTrieLoader) CalcTrieRoot(db ethdb.Database, quit <-chan struct{})
 		}
 	}
 
-	fmt.Printf("IH Loop exit\n")
 	return l.receiver.Root(), nil
 }
 
