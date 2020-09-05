@@ -388,6 +388,7 @@ func (l *FlatDBTrieLoader) CalcTrieRoot(db ethdb.Database, quit <-chan struct{})
 		}
 	}
 
+	fmt.Printf("IH Loop exit\n")
 	return l.receiver.Root(), nil
 }
 
@@ -788,6 +789,7 @@ func (c *IHCursor) Seek(seek []byte) ([]byte, []byte, bool, error) {
 		return nil, nil, false, nil
 	}
 
+	fmt.Printf("1: %x\n", k)
 	return k, v, isSequence(seek, k), nil
 }
 
