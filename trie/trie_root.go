@@ -283,15 +283,15 @@ func (l *FlatDBTrieLoader) iteration(c ethdb.Cursor, ih *IHCursor, first bool) e
 	if len(l.ihK) > common.HashLength {
 		l.itemType = SHashStreamItem
 		l.accountKey = nil
-		l.storageKey = append(l.storageKey[:0], l.ihK...)
-		l.hashValue = append(l.hashValue[:0], l.ihV...)
+		l.storageKey = common.CopyBytes(l.ihK)
+		l.hashValue = common.CopyBytes(l.ihV)
 		l.storageValue = nil
 	} else {
 		l.itemType = AHashStreamItem
-		l.accountKey = append(l.accountKey[:0], l.ihK...)
+		l.accountKey = common.CopyBytes(l.ihK)
 		l.storageKey = nil
 		l.storageValue = nil
-		l.hashValue = append(l.hashValue[:0], l.ihV...)
+		l.hashValue = common.CopyBytes(l.ihV)
 	}
 
 	// go to Next Sub-Tree
