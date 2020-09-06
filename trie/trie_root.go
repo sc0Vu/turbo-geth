@@ -283,15 +283,15 @@ func (l *FlatDBTrieLoader) iteration(c ethdb.Cursor, ih *IHCursor, first bool) e
 	if len(l.ihK) > common.HashLength {
 		l.itemType = SHashStreamItem
 		l.accountKey = nil
-		l.storageKey = common.CopyBytes(l.ihK)
-		l.hashValue = common.CopyBytes(l.ihV)
+		l.storageKey = append(l.storageKey[:0], l.ihK...)
+		l.hashValue = append(l.hashValue[:0], l.ihV...)
 		l.storageValue = nil
 	} else {
 		l.itemType = AHashStreamItem
-		l.accountKey = common.CopyBytes(l.ihK)
+		l.accountKey = append(l.accountKey[:0], l.ihK...)
 		l.storageKey = nil
 		l.storageValue = nil
-		l.hashValue = common.CopyBytes(l.ihV)
+		l.hashValue = append(l.hashValue[:0], l.ihV...)
 	}
 
 	// go to Next Sub-Tree
@@ -735,7 +735,7 @@ func (c *IHCursor) _seek(seek []byte) (k, v []byte, err error) {
 	if len(v) > common.HashLength {
 		keyPart := len(v) - common.HashLength
 		k = append(k, v[:keyPart]...)
-		v = common.CopyBytes(v[keyPart:])
+		v = v[keyPart:]
 	}
 	if c.filter(k) { // if filter allow us, return. otherwise delete and go ahead.
 		return k, v, nil
